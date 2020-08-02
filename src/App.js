@@ -17,20 +17,36 @@ const testArr = [
     isOnline: true
   }
 ]
+
+const initialState = {
+  hideButton: false
+}
 class App extends Component {
 
   constructor(props) {
     super(props)
     this.fetch = this.fetch.bind(this);
+    this.state = {
+      ...initialState
+    }
   }
 
   fetch() {
     this.props.fetchPosts()
-    
+    this.handleHideButton()
+  }
+
+  handleHideButton() {
+    const { hideButton } = this.state
+    this.setState({
+      hideButton: !hideButton
+    })
   }
   render() {
 
     const { posts } = this.props
+    const { hideButton } = this.state
+    console.log('>>>>>>>>>', posts)
 
     const configButton = {
       buttonText: "Get posts",
@@ -41,7 +57,10 @@ class App extends Component {
         <Header />
         <section className='main'>
           <Headline header={"Post"} desc={"Click the button to enter post"} tes={testArr} />
-          <SharedButton {...configButton} />
+          {
+            !hideButton && <SharedButton {...configButton} />
+          }
+
           {posts.length > 0 &&
             <div>
               {posts.map((post, index) => {

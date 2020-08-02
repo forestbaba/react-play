@@ -33,4 +33,11 @@ describe("App componet", () => {
         const component = findByTestAttr(wrapper, 'appComponent');
         expect(component.length).toBe(1)
     })
+
+    it('handleHideButton Method should behave as expected', () => {
+        const classInstance = wrapper.instance()
+        classInstance.handleHideButton()
+        const newState = classInstance.state.hideButton;
+        expect(newState).toBe(true)
+    })
 })
