@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import Header from './components/header'
-import Headline from './components/headline'
-import './app.scss'
+import { connect } from 'react-redux';
+import Header from './components/header';
+import Headline from './components/headline';
+import './app.scss';
+import SharedButton from './components/button';
+import ListItem from './components/listitem';
+import { fetchPosts } from './actions';
+
 
 const testArr = [
   {
@@ -14,18 +19,56 @@ const testArr = [
 ]
 class App extends Component {
 
+  constructor(props) {
+    super(props)
+    this.fetch = this.fetch.bind(this);
+  }
 
-
+  fetch() {
+    this.props.fetchPosts()
+    
+  }
   render() {
+
+    const { posts } = this.props
+
+    const configButton = {
+      buttonText: "Get posts",
+      emitEvent: this.fetch
+    }
     return (
-      <div className="App">
+      <div className="App" data-test='appComponent'>
         <Header />
         <section className='main'>
           <Headline header={"Post"} desc={"Click the button to enter post"} tes={testArr} />
+          <SharedButton {...configButton} />
+          {posts.length > 0 &&
+            <div>
+              {posts.map((post, index) => {
+                const { title, body } = post;
+
+                const configureListItem = {
+                  title,
+                  desc: body
+                };
+
+                return (
+                  <ListItem key={index} {...configureListItem} />
+                )
+
+              })}
+            </div>
+          }
         </section>
       </div>
     );
   }
 }
 
-export default App;
+
+const mapStateToProps = state => {
+  return {
+    posts: state.posts
+  }
+}
+export default connect(mapStateToProps, { fetchPosts })(App);

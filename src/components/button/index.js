@@ -16,7 +16,7 @@ class ShareButton extends Component {
             <button
                 onClick={() => this.submitEvent()}
                 data-test='buttonComponent'>
-
+                {buttonText}
             </button>
 
         )
